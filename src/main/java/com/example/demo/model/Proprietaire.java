@@ -1,6 +1,6 @@
-package com.example.demo.modele;
+package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +13,11 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"nom", "prenom"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "nom", "prenom" }))
 public class Proprietaire {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
@@ -26,7 +27,6 @@ public class Proprietaire {
     private String prenom;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proprietaire")
-    @JsonIgnoreProperties("proprietaire")
+    @JsonIgnore
     private List<Voiture> voitures;
 }
-

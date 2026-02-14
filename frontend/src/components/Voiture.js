@@ -54,7 +54,7 @@ class Voiture extends Component {
   submitVoiture = (event) => {
     event.preventDefault();
     const { marque, modele, couleur, immatricule, annee, prix, proprietaireId } = this.state;
-    
+
     // Validate that a proprietaire is selected
     if (!proprietaireId || proprietaireId === '') {
       alert("Veuillez sélectionner un propriétaire");
@@ -62,7 +62,7 @@ class Voiture extends Component {
     }
 
     const proprietaire = this.state.proprietaires.find(p => p.id === parseInt(proprietaireId));
-    
+
     if (!proprietaire) {
       alert("Propriétaire introuvable. Veuillez réessayer.");
       return;
@@ -129,7 +129,7 @@ class Voiture extends Component {
     return (
       <div>
         <div style={{ display: this.state.show ? "block" : "none" }}>
-          <MyToast children={{ show: this.state.show, message: "Voiture enregistrée avec succès.", type: "success" }} />
+          <MyToast show={this.state.show} message="Voiture enregistrée avec succès." type="success" />
         </div>
 
         <Card className="border border-dark bg-dark text-white">

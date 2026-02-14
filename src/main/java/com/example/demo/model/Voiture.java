@@ -1,4 +1,4 @@
-package com.example.demo.modele;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,8 +9,9 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 public class Voiture {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
@@ -30,12 +31,12 @@ public class Voiture {
     private int prix;
 
     @NonNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "proprietaire_id")
     private Proprietaire proprietaire;
 
-    public Voiture(@NonNull String marque, @NonNull String modele, @NonNull String couleur, 
-                   @NonNull String immatricule, int annee, int prix, @NonNull Proprietaire proprietaire) {
+    public Voiture(@NonNull String marque, @NonNull String modele, @NonNull String couleur,
+            @NonNull String immatricule, int annee, int prix, @NonNull Proprietaire proprietaire) {
         this.marque = marque;
         this.modele = modele;
         this.couleur = couleur;
@@ -45,4 +46,3 @@ public class Voiture {
         this.proprietaire = proprietaire;
     }
 }
-

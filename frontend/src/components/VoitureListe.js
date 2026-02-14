@@ -26,18 +26,15 @@ class VoitureListe extends Component {
 
   deleteVoiture = (voitureId) => {
     axios.delete(`${API_BASE_URL}/voitures/${voitureId}`)
-      .then(response => {
-        if (response.data != null) {
-          this.setState({ show: true });
-          setTimeout(() => this.setState({ show: false }), 3000);
-          this.setState({
-            voitures: this.state.voitures.filter(voiture => voiture.id !== voitureId)
-          });
-        }
+      .then(() => {
+        this.setState({
+          show: true,
+          voitures: this.state.voitures.filter(v => v.id !== voitureId)
+        });
+        setTimeout(() => this.setState({ show: false }), 3000);
       })
       .catch(error => {
         console.error("Error deleting voiture:", error);
-        this.setState({ show: false });
       });
   };
 
@@ -45,7 +42,7 @@ class VoitureListe extends Component {
     return (
       <div>
         <div style={{ display: this.state.show ? "block" : "none" }}>
-          <MyToast children={{ show: this.state.show, message: "Voiture supprimée avec succès.", type: "danger" }} />
+          <MyToast show={this.state.show} message="Voiture supprimée avec succès." type="danger" />
         </div>
 
         <Card className="border border-dark bg-dark text-white">
@@ -83,15 +80,15 @@ class VoitureListe extends Component {
                       <td>{voiture.annee}</td>
                       <td>{voiture.prix}</td>
                       <td>
-                        {voiture.proprietaire ? 
-                          `${voiture.proprietaire.nom} ${voiture.proprietaire.prenom}` : 
-                          'N/A'}
+                        {voiture.proprietaire
+                          ? `${voiture.proprietaire.nom} ${voiture.proprietaire.prenom}`
+                          : 'N/A'}
                       </td>
                       <td>
                         <Button
                           size="sm"
                           variant="outline-danger"
-                          onClick={this.deleteVoiture.bind(this, voiture.id)}
+                          onClick={() => this.deleteVoiture(voiture.id)}
                         >
                           Supprimer
                         </Button>
@@ -109,4 +106,3 @@ class VoitureListe extends Component {
 }
 
 export default VoitureListe;
-
