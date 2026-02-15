@@ -46,4 +46,3 @@
   ```bash
   minikube service springboot-backend --url
   ```
-

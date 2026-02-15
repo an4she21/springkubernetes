@@ -11,6 +11,10 @@ spec:
     metadata:
       labels:
         app: springboot-backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
         - name: backend
@@ -19,14 +23,38 @@ spec:
           ports:
             - containerPort: 8080
           env:
+            # Database connection from Secrets
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mariadb://mariadb:3306/springboot
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: datasource-url
             - name: SPRING_DATASOURCE_USERNAME
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: datasource-username
             - name: SPRING_DATASOURCE_PASSWORD
-              value: rootpassword
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: datasource-password
+            # Application configuration from ConfigMap
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-              value: update
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: spring.jpa.hibernate.ddl-auto
+            - name: SPRING_JPA_SHOW_SQL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: spring.jpa.show-sql
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: spring.application.name
           readinessProbe:
             httpGet:
               path: /api/proprietaires
@@ -55,4 +83,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: NodePort
+  type: ClusterIP
